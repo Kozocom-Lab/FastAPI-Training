@@ -1,15 +1,26 @@
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
+import dash_auth
+import dash_bootstrap_components as dbc
 
 import pandas as pd
 colors = {
     'background': '#111111',
     'text': '#7FDBFF'
 }
+external_stylesheets = [dbc.themes.DARKLY]
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
 
-app = Dash(__name__)
 
+app = Dash(__name__, external_stylesheets=external_stylesheets)
+VALIDATION_LOGIN = {
+    'admin': 'admin1234'
+}
+
+auth = dash_auth.BasicAuth(
+    app,
+    VALIDATION_LOGIN
+)
 app.layout = html.Div([
     html.H1(
         children='Hello Dash',
@@ -80,7 +91,7 @@ def update_figure(type_char, quota, year_slider):
         paper_bgcolor=colors['background'],
         font_color=colors['text']
     )
-
+ 
     return fig
 
 if __name__ == '__main__':
